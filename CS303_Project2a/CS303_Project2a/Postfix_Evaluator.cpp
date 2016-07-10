@@ -1,6 +1,7 @@
 /** Implementation of the postfix_evaluator. */
 
 #include "Postfix_Evaluator.h"
+#include "EvaluatorError.h"
 #include <sstream>
 #include <cctype>
 using std::stack;
@@ -8,7 +9,7 @@ using std::string;
 using std::istringstream;
 using std::isdigit;
 
-const std::string Postfix_Evaluator::OPERATORS = "+-*/%";
+const std::string Postfix_Evaluator::OPERATORS = "+-*/%^";
 
 /** Evaluates a postfix expression.
     @param expression The expression to be evaluated
@@ -33,7 +34,7 @@ int Postfix_Evaluator::eval(const std::string& expression) {
       int result = eval_op(next_char);
       operand_stack.push(result);
     } else {
-      throw Syntax_Error("Invalid character encountered");
+		throw EvaluatorError("Invalid character encountered");
     }
   }
   if (!operand_stack.empty()) {
@@ -42,10 +43,10 @@ int Postfix_Evaluator::eval(const std::string& expression) {
     if (operand_stack.empty()) {
       return answer;
     } else {
-      throw Syntax_Error("Stack should be empty");
+		throw EvaluatorError("Stack should be empty");
     }
   } else {
-    throw Syntax_Error("Stack is empty");
+	  throw EvaluatorError("Stack is empty");
   }
 }
 
@@ -57,11 +58,11 @@ int Postfix_Evaluator::eval(const std::string& expression) {
 */
 int Postfix_Evaluator::eval_op(char op) {
   if (operand_stack.empty()) 
-    throw Syntax_Error("Stack is empty");
+	  throw EvaluatorError("Stack is empty");
   int rhs = operand_stack.top();
   operand_stack.pop();
   if (operand_stack.empty())
-    throw Syntax_Error("Stack is empty");
+	  throw EvaluatorError("Stack is empty");
   int lhs = operand_stack.top();
   operand_stack.pop();
   int result = 0;
@@ -76,6 +77,7 @@ int Postfix_Evaluator::eval_op(char op) {
              break;
   case '%' : result = lhs % rhs;
              break;
+  case '^': result = pow(lhs, rhs);
   }
   return result;
 }

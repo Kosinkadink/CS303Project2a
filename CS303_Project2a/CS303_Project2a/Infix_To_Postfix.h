@@ -1,7 +1,7 @@
 #ifndef INFIX_TO_POSTFIX_H_
 #define INFIX_TO_POSTFIX_H_
 
-#include "Syntax_Error.h"
+#include "EvaluatorError.h"
 #include <string>
 #ifdef USEKW
 #include "stack.h"  // For KW::stack

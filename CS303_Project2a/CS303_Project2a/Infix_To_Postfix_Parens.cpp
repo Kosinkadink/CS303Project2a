@@ -1,16 +1,17 @@
 /** Implementation of Infix_To_Postfix that processes parentheses.*/
 
 #include "Infix_To_Postfix.h"
+#include "EvaluatorError.h"
 #include <sstream>
 #include <cctype>
 using std::string;
 using std::istringstream;
 
-const string Infix_To_Postfix::OPERATORS = "+-*/%()[]{}";
-const int Infix_To_Postfix::PRECEDENCE[] = { 1, 1, 2, 2, 2, -1, -1, -1, -1, -1, -1 };
+const string Infix_To_Postfix::OPERATORS = "+-*/^%()[]{}";
+const int Infix_To_Postfix::PRECEDENCE[] = { 1, 1, 2, 2, 3, 2, -1, -1, -1, -1, -1, -1 };
 
 /** Extract and process each token in infix and return the
-    equivalent postfix string.
+      equivalent postfix string.
     @param expression The infix expression
     @return The equivalent postfix expression
     @throws Syntax_Error
@@ -28,7 +29,7 @@ string Infix_To_Postfix::convert(const string& expression){
     } else if (is_operator(next_token[0])) {
       process_operator(next_token[0]);
     } else {
-      throw Syntax_Error("Unexpected Character Encountered");
+		throw EvaluatorError("Unexpected Character Encountered");
     }
   } // End while
   // Pop any remaining operators and append them to postfix
@@ -36,7 +37,7 @@ string Infix_To_Postfix::convert(const string& expression){
     char op = operator_stack.top();
     operator_stack.pop();
     if (op == '(' || op == '[' || op == '}') {
-      throw Syntax_Error("Unmatched open parenthesis");
+		throw EvaluatorError("Unmatched open parenthesis");
     }
     postfix += op;
     postfix += " ";
@@ -51,7 +52,7 @@ string Infix_To_Postfix::convert(const string& expression){
 void Infix_To_Postfix::process_operator(char op) {
   if (operator_stack.empty() || (op == '(') || (op == '[') || (op == '{')) {
     if (op == ')' || op == ']' || op == '}')
-      throw Syntax_Error("Unmatched close parenthesis");
+		throw EvaluatorError("Unmatched close parenthesis");
     operator_stack.push(op);
   } else {
     if (precedence(op) > precedence(operator_stack.top())) {
@@ -77,21 +78,21 @@ void Infix_To_Postfix::process_operator(char op) {
             && (operator_stack.top() == '(')) {
           operator_stack.pop();
         } else {
-          throw Syntax_Error("Unmatched close parentheses");
+			throw EvaluatorError("Unmatched close parentheses");
         }
       } else if (op == ']') {
         if (!operator_stack.empty() 
             && (operator_stack.top() == '[')) {
           operator_stack.pop();
         } else {
-          throw Syntax_Error("Unmatched close parentheses");
+			throw EvaluatorError("Unmatched close parentheses");
         }
       } else if (op == '}') {
         if (!operator_stack.empty() 
             && (operator_stack.top() == '{')) {
           operator_stack.pop();
         } else {
-          throw Syntax_Error("Unmatched close parentheses");
+			throw EvaluatorError("Unmatched close parentheses");
         }
       } else {
         operator_stack.push(op);

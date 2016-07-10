@@ -3,7 +3,7 @@
 
 #include <stack>
 #include <string>
-#include "Syntax_Error.h"
+#include "EvaluatorError.h"
 
 class Postfix_Evaluator {
   // Public member functions

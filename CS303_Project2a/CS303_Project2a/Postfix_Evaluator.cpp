@@ -10,7 +10,7 @@ using std::istringstream;
 using std::isdigit;
 
 const std::string Postfix_Evaluator::OPERATORS = "+-*/%^";
-
+ 
 /** Evaluates a postfix expression.
     @param expression The expression to be evaluated
     @return The value of the expression

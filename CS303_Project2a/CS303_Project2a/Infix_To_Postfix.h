@@ -9,7 +9,7 @@
 #include <stack>    // For standard stack
 #endif
 
-/** Class to convert infix expressions to postfix expressions. */
+/** Class to convert infix expressions to postfix expressions.  */
 class Infix_To_Postfix {
   public:
     /** Extracts and processes each token in infix and returns the

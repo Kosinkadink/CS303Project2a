@@ -9,7 +9,7 @@ using std::istringstream;
 
 const string Infix_To_Postfix::OPERATORS = "+-*/^%()[]{}";
 const int Infix_To_Postfix::PRECEDENCE[] = { 1, 1, 2, 2, 3, 2, -1, -1, -1, -1, -1, -1 };
-
+ 
 /** Extract and process each token in infix and return the
       equivalent postfix string.
     @param expression The infix expression

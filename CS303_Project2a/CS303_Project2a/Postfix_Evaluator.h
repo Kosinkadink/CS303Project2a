@@ -9,7 +9,7 @@ class Postfix_Evaluator {
   // Public member functions
   public:
     /** Evaluates a postfix expression.
-        @param expression The expression to be evaluated
+        @param expression The expression to be evaluated  
         @return The value of the expression
         @throws Syntax_Error if a syntax error is detected
     */

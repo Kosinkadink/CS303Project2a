@@ -64,11 +64,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Infix_To_Postfix_Parens.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Postfix_Evaluator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Evaluator.h" />
     <ClInclude Include="EvaluatorError.h" />
+    <ClInclude Include="Infix_To_Postfix.h" />
+    <ClInclude Include="Postfix_Evaluator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

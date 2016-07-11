@@ -1,5 +1,5 @@
 #pragma once
- 
+
 
 #include <string>
 #include <sstream>
@@ -21,32 +21,8 @@ private:
 
 int eval(string expression)
 {
-	stringstream firstparse(expression);
-	char ch, ch2;
-
-	list<string> coolPostfix;
-	int intpart;
-	string firstresult,postfixresult,part;
-	while (firstparse >> ch)
-	{
-		if (isdigit(ch))
-		{
-			firstparse.putback(ch);
-			firstparse >> intpart;
-			coolPostfix.push_back()
-		}
-		else if (ch == '+')
-		{
-			if (firstparse >> ch2)
-			{
-				if (ch2)
-			}
-		}
-
-
-
-	}
-
+	
+	return 0;
 
 
 }

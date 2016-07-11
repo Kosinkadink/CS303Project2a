@@ -1,7 +1,6 @@
 /** Implementation of the postfix_evaluator. */
 
 #include "Postfix_Evaluator.h"
-#include "EvaluatorError.h"
 #include <sstream>
 #include <cctype>
 using std::stack;
@@ -9,8 +8,8 @@ using std::string;
 using std::istringstream;
 using std::isdigit;
 
-const std::string Postfix_Evaluator::OPERATORS = "+-*/%^";
- 
+const std::string Postfix_Evaluator::OPERATORS = "!t_~^*/%+->g<len&|";
+
 /** Evaluates a postfix expression.
     @param expression The expression to be evaluated
     @return The value of the expression
@@ -34,7 +33,7 @@ int Postfix_Evaluator::eval(const std::string& expression) {
       int result = eval_op(next_char);
       operand_stack.push(result);
     } else {
-		throw EvaluatorError("Invalid character encountered");
+      throw Syntax_Error("Invalid character encountered");
     }
   }
   if (!operand_stack.empty()) {
@@ -43,10 +42,10 @@ int Postfix_Evaluator::eval(const std::string& expression) {
     if (operand_stack.empty()) {
       return answer;
     } else {
-		throw EvaluatorError("Stack should be empty");
+      throw Syntax_Error("Stack should be empty");
     }
   } else {
-	  throw EvaluatorError("Stack is empty");
+    throw Syntax_Error("Stack is empty");
   }
 }
 
@@ -58,14 +57,23 @@ int Postfix_Evaluator::eval(const std::string& expression) {
 */
 int Postfix_Evaluator::eval_op(char op) {
   if (operand_stack.empty()) 
-	  throw EvaluatorError("Stack is empty");
+    throw Syntax_Error("Stack is empty");
   int rhs = operand_stack.top();
   operand_stack.pop();
+  switch (op) {
+  case '~' : return -rhs;
+  case '!': return (rhs != 0);
+  case 't': return rhs+1;
+  case '_': return rhs-1;
+  default: break;
+  }
+
+
   if (operand_stack.empty())
-	  throw EvaluatorError("Stack is empty");
+    throw Syntax_Error("Stack is empty");
   int lhs = operand_stack.top();
-  operand_stack.pop();
   int result = 0;
+  operand_stack.pop();
   switch(op) {
   case '+' : result = lhs + rhs;
              break;
@@ -77,7 +85,15 @@ int Postfix_Evaluator::eval_op(char op) {
              break;
   case '%' : result = lhs % rhs;
              break;
-  case '^': result = pow(lhs, rhs);
+  case '^': result = pow(lhs, rhs); break;
+  case '>': result = lhs > rhs; break;
+  case 'g': result = lhs >= rhs; break;
+  case '<': result = lhs < rhs; break;
+  case 'l': result = lhs <= rhs; break;
+  case 'e': result = lhs == rhs; break;
+  case 'n': result = lhs != rhs; break;
+  case '&': result = lhs && rhs; break;
+  case '|': result = lhs || rhs; break;
   }
   return result;
 }

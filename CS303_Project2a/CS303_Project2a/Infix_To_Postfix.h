@@ -1,7 +1,7 @@
 #ifndef INFIX_TO_POSTFIX_H_
 #define INFIX_TO_POSTFIX_H_
 
-#include "EvaluatorError.h"
+#include "Syntax_Error.h"
 #include <string>
 #ifdef USEKW
 #include "stack.h"  // For KW::stack
@@ -9,7 +9,7 @@
 #include <stack>    // For standard stack
 #endif
 
-/** Class to convert infix expressions to postfix expressions.  */
+/** Class to convert infix expressions to postfix expressions. */
 class Infix_To_Postfix {
   public:
     /** Extracts and processes each token in infix and returns the

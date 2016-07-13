@@ -62,7 +62,7 @@ int Postfix_Evaluator::eval_op(char op) {
   operand_stack.pop();
   switch (op) {
   case '~' : return -rhs;
-  case '!': return (rhs != 0);
+  case '!': return (rhs == 0);
   case 't': return rhs+1;
   case '_': return rhs-1;
   default: break;

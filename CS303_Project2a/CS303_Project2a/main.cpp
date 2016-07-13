@@ -9,7 +9,7 @@ int main()
 	Postfix_Evaluator pe;
 
 	string teststring = "1 + 3 > 2";
-	string teststring2 = "~ 1";
+	string teststring2 = "! 1";
 	string newstring = itp.convert(teststring2);
 
 	int output = pe.eval(newstring);

@@ -19,7 +19,7 @@ class Infix_To_Postfix {
         @throws Syntax_Error
     */
     std::string convert(const std::string& expression);
-
+    std::string prepare(const std::string& expression);
   private:
     /** Function to process operators.
         @param op The operator

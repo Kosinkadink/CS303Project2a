@@ -8,11 +8,15 @@ int main()
 	Infix_To_Postfix itp;
 	Postfix_Evaluator pe;
 
-	string teststring = "1 + 3 > 2";
-	string teststring2 = "! 1";
-	string newstring = itp.convert(teststring2);
+	string teststring = "(9+2)^5";
 
-	int output = pe.eval(newstring);
+    teststring = itp.prepare(teststring);
+    if (teststring != "")
+    {
+        string teststring2 = "+ 1";
+        string newstring = itp.convert(teststring);
 
+        int output = pe.eval(newstring);
+    }
 	return 0;
 }

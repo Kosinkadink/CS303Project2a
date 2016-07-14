@@ -1,8 +1,10 @@
 /** Implementation of the postfix_evaluator. */
 
+#include "EvaluatorError.h"
 #include "Postfix_Evaluator.h"
 #include <sstream>
 #include <cctype>
+#include <iostream>
 using std::stack;
 using std::string;
 using std::istringstream;
@@ -74,15 +76,25 @@ int Postfix_Evaluator::eval_op(char op) {
   int lhs = operand_stack.top();
   int result = 0;
   operand_stack.pop();
+  try{
   switch(op) {
-  case '+' : result = lhs + rhs;
+  case '+' : 
+             result = lhs + rhs;
              break;
   case '-' : result = lhs - rhs;
              break;
   case '*' : result = lhs * rhs;
              break;
-  case '/' : result = lhs / rhs;
-             break;
+             
+  case '/':
+      if (rhs != 0){
+          result = lhs / rhs;
+          break;
+      }
+      else
+          throw EvaluatorError("Division by zero is not allowed.");
+             
+
   case '%' : result = lhs % rhs;
              break;
   case '^': result = pow(lhs, rhs); break;
@@ -94,6 +106,11 @@ int Postfix_Evaluator::eval_op(char op) {
   case 'n': result = lhs != rhs; break;
   case '&': result = lhs && rhs; break;
   case '|': result = lhs || rhs; break;
+  }
+  }
+  catch (EvaluatorError error){
+      cout << error.what() << endl;
+      system("pause");
   }
   return result;
 }

@@ -85,6 +85,19 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back(' ');
                     before = '-';
                 }
+				else if (next == '(' || next == '{' || next == '[')
+				{
+					parse >> temp;
+					// addition
+					if (isdigit(temp) && isdigit(before))
+					{
+						parse.putback(temp);
+						parse.putback(next);
+						prepared.push_back('-');
+						prepared.push_back(' ');
+						before = '-';
+					}
+				}
             }
             else if (current == '+')
             {
@@ -136,6 +149,19 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back(' ');
                     before = '+';
                 }
+				else if (next == '(' || next == '{' || next == '[')
+				{
+					parse >> temp;
+					// addition
+					if (isdigit(temp) && isdigit(before))
+					{
+						parse.putback(temp);
+						parse.putback(next);
+						prepared.push_back('+');
+						prepared.push_back(' ');
+						before = '+';
+					}
+				}
             }
             // multiply, divide, or mod; check that they are bracketed by numbers
             else if (current == '/' || current == '*' || current == '%')
@@ -419,26 +445,28 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 before = current;
             }
             // closing parenthesis
-            else if ((current == ')' || current == '}' || current == ']') && !parenth_stack.empty())
+            else if ((current == ')' || current == '}' || current == ']'))
             {
-                if (current == ')')
+                if (current == ')' && !parenth_stack.empty())
                 {
                     temp = parenth_stack.top();
-                    if (temp != '(')
+                    if (temp != '(' )
                         throw EvaluatorError("incorrect parenthesis usage.");
                 }
-                else if (current == '}')
+				else if (current == '}' && !parenth_stack.empty())
                 {
                     temp = parenth_stack.top();
                     if (temp != '{')
                         throw EvaluatorError("incorrect parenthesis usage.");
                 }
-                else if (current == ']')
-                {
-                    temp = parenth_stack.top();
-                    if (temp != '[')
-                        throw EvaluatorError("incorrect parenthesis usage.");
-                }
+				else if (current == ']' && !parenth_stack.empty())
+				{
+					temp = parenth_stack.top();
+					if (temp != '[')
+						throw EvaluatorError("incorrect parenthesis usage.");
+				}
+				else
+					throw EvaluatorError("missing opening parenthesis.");
                 prepared += current;
                 prepared += ' ';
                 before = ')';

@@ -170,6 +170,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 // legal
                 if (before == ')' || before == '}' || before == ']' || (isdigit(before)) && (isdigit(next) || next == '(' || next == '{' || next == '['))
                 {
+                    before = current;
                     parse.putback(next);
                     prepared.push_back(current);
                     prepared.push_back(' ');
@@ -329,7 +330,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     }
                 }
             }
-            else if (next == '>')
+            else if (current == '>')
             {
                 parse >> next;
                 // look for a digit

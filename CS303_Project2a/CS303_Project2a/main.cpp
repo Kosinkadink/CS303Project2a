@@ -12,7 +12,7 @@ int main()
 	Infix_To_Postfix itp;
 	Postfix_Evaluator pe;
 
-	string teststring = "1+ (5>2)";
+	string teststring = "---3";
 
     teststring = itp.prepare(teststring);
     if (teststring != "")

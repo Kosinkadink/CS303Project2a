@@ -17,23 +17,36 @@ const int Infix_To_Postfix::PRECEDENCE[] = { 8, 8, 8, 8, 7, 6, 6, 6, 5, 5, 4, 4,
     @throws Syntax_Error
 */
 
+void Infix_To_Postfix::unstack(stringstream& parse)
+{
+	while (!temp_stack.empty())
+	{
+		parse.putback(temp_stack.top());
+		temp_stack.pop();
+	}
+}
+
 
 std::string Infix_To_Postfix::prepare(const std::string& expression)
 {
     std::stack<char> parenth_stack;
+	
     char before = NULL, current = NULL, next = NULL, temp;
     std::string prepared = "";
     string str_nums;
     int nums;
+	int charnum = -1;
     std::stringstream parse(expression);
     try{
         while (parse >> current)
         {
+			charnum++;
             if (current == '-')
             {
                 parse >> next;
+
                 // first character in string is a -
-                if (before == NULL)
+				if (before == NULL || before == '(' || before == '{' || before == '[' || before == '^' || before == '&' || before =='|')
                 {
                     // negative number
                     if (isdigit(next))
@@ -43,14 +56,50 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back(' ');
                         before = '~';
                     }
+					else if (next == '(' || next == '{' || next == '[')
+					{
+						do{
+							temp_stack.push(next);
+							parse >> next;
+						} while (!isdigit(next));
+						parse.putback(next);
+						unstack(parse);
+						prepared.push_back('~');
+						prepared.push_back(' ');
+						before = '~';
+
+					}
                     // decrement
                     else if (next == '-')
                     {
+						temp_stack.push(next);
+						parse >> next;
+						//third -
+						if (next == '-')
+						{
+							temp_stack.push(next);
+							parse >> next;
+							// fourth -
+							if (next == '-')
+							{
+								unstack(parse);
+							}
+							else{
+								parse.putback(next);
+								unstack(parse);
+								prepared += '~';
+								prepared += ' ';
+								before += '~';
+								continue;
+							}
+						}
+						
                         prepared.push_back('_');
                         prepared.push_back(' ');
                         before = '_';
                     }
                 }
+				/*
                 // negative after a parenthesis or power
                 else if (before == '(' || before == '{' || before == '[' || before == '^')
                 {
@@ -70,6 +119,21 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         before = '_';
                     }
                 }
+				*/
+			else if (next == '(' || next == '{' || next == '[')
+			{
+				do{
+					temp_stack.push(next);
+					parse >> next;
+				} while (!isdigit(next));
+				parse.putback(next);
+				unstack(parse);
+				prepared.push_back('-');
+				prepared.push_back(' ');
+				before = '-';
+
+			
+			}
                 // decrement
                 else if (next == '-')
                 {
@@ -235,9 +299,9 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     if (isdigit(next) || next == '(' || next == '{' || next == '[')
                     {
                         parse.putback(next);
-                        prepared += '=';
+                        prepared += 'e';
                         prepared += ' ';
-                        before = '=';
+                        before = 'e';
                     }
                 }
             }
@@ -259,18 +323,16 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     // also valid
                     else if (next == '(' || next == '{' || next == '[' || next == '-')
                     {
-                        // still looking for a number
-                        parse >> temp;
-                        if (isdigit(temp))
-                        {
-                            parse.putback(temp);
-                            parse.putback(next);
-                            prepared += '^';
-                            prepared += ' ';
-                            before = '^';
-                        }
-                        else
-                            throw EvaluatorError("A power needs a following number.");
+						do {
+							temp_stack.push(next);
+							parse >> next;
+						} while (!isdigit(next));
+						parse.putback(next);
+						unstack(parse);
+						before = '^';
+						prepared += '^';
+						prepared += ' ';
+						
                     }
                     else
                         throw EvaluatorError("A power needs a following number.");
@@ -388,17 +450,18 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 if (next == '&' && (before == ')' || before == '}' || before == ']' || isdigit(before)))
                 {
                     parse >> next;
-                    if (next == '(' || next == '{' || next == '[')
+                    if (next == '(' || next == '{' || next == '[' || next == '-')
                     {
-                        parse >> temp;
-                        if (isdigit(temp))
-                        {
-                            parse.putback(temp);
-                            parse.putback(next);
-                            prepared += '&';
-                            prepared += ' ';
-                            before = '&';
-                        }
+						do {
+							temp_stack.push(next);
+							parse >> next;
+						} while (!isdigit(next));
+						parse.putback(next);
+						unstack(parse);
+                        prepared += '&';
+                        prepared += ' ';
+                        before = '&';
+
                     }
                     else if (isdigit(next))
                     {

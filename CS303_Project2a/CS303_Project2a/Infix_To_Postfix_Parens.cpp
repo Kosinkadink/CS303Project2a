@@ -36,11 +36,28 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
     string str_nums;
     int nums;
 	int charnum = -1;
+	int g = 0;
     std::stringstream parse(expression);
     try{
         while (parse >> current)
         {
 			charnum++;
+
+			//if first expression is a binary operator or closing parenthesis, throw error message
+			while (g == 0) 
+			{ 
+				g = 1;
+				if (current == '<' || current == '>' || current == '&' || current == '|') 
+				{
+					throw EvaluatorError("Expression cannot start with a binary operator @ char: 0");
+				}
+				if (current == ')' || current == '}' || current == ']')
+				{
+					throw EvaluatorError("Expression cannot start with a closing parenthesis @ char: 0");
+				}
+
+			}
+
             if (current == '-')
             {
                 parse >> next;
@@ -265,6 +282,12 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 {
                     do{
                         parse >> next;
+
+						if (next == '=' || next == '&' || next == '|' || next == '<' || next == '>')
+						{
+							throw EvaluatorError("Cannot have two binary operators in a row");
+						}
+
                         temp_stack.push(next);
                     } while (!isdigit(next));
                     unstack(parse);
@@ -299,6 +322,10 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 {
                     do{
                         parse >> next;
+
+						if (next == '='||next=='&'||next=='|'||next=='<'||next=='>') 
+						{ throw EvaluatorError("Cannot have two binary operators in a row"); }
+
                         temp_stack.push(next);
                     } while (!isdigit(next));
                     parse.putback(next);
@@ -347,6 +374,10 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             else if (current == '<')
             {
                 parse >> next;
+				if (next == '&' || next == '|' || next == '<' || next == '>')
+				{
+					throw EvaluatorError("Cannot have two binary operators in a row");
+				}
                 // look for a digit
                 if (isdigit(next))
                 {
@@ -372,6 +403,11 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 else if (next == '=')
                 {
                     parse >> next;
+
+					if (next == '=' || next == '&' || next == '|' || next == '<' || next == '>')
+					{
+						throw EvaluatorError("Cannot have two binary operators in a row");
+					}
                     // look for a digit
                     if (isdigit(next))
                     {
@@ -398,6 +434,10 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             else if (current == '>')
             {
                 parse >> next;
+				if (next == '&' || next == '|' || next == '<' || next == '>')
+				{
+					throw EvaluatorError("Cannot have two binary operators in a row");
+				}
                 // look for a digit
                 if (isdigit(next))
                 {
@@ -423,6 +463,11 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 else if (next == '=')
                 {
                     parse >> next;
+
+					if (next == '=' || next == '&' || next == '|' || next == '<' || next == '>')
+					{
+						throw EvaluatorError("Cannot have two binary operators in a row");
+					}
                     // look for a digit
                     if (isdigit(next))
                     {
@@ -453,6 +498,10 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 if (next == '&' && (before == ')' || before == '}' || before == ']' || isdigit(before)))
                 {
                     parse >> next;
+
+					if (next == '='||next=='&'||next=='|'||next=='<'||next=='>') 
+						{ throw EvaluatorError("Cannot have two binary operators in a row"); }
+
                     if (next == '(' || next == '{' || next == '[' || next == '-')
                     {
 						do {
@@ -482,6 +531,12 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 if (next == '|' && (before == ')' || before == '}' || before == ']' || isdigit(before)))
                 {
                     parse >> next;
+
+					if (next == '=' || next == '&' || next == '|' || next == '<' || next == '>')
+					{
+						throw EvaluatorError("Cannot have two binary operators in a row");
+					}
+
                     if (next == '(' || next == '{' || next == '[')
                     {
                         do {

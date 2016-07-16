@@ -244,17 +244,17 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             // next several values may be one number, catch them all
             else if (isdigit(current))
             {
-                if (!isdigit(before))
-                {
-                    before = current;
-                    parse.putback(current);
-                    parse >> nums;
-                    str_nums = to_string(nums);
-                    prepared += (str_nums);
-                    prepared += ' ';
-                }
-                else
-                    throw EvaluatorError("cannot have two consecutive numbers.");
+				if (!isdigit(before))
+				{
+					before = current;
+					parse.putback(current);
+					parse >> nums;
+					str_nums = to_string(nums);
+					prepared += (str_nums);
+					prepared += ' ';
+				}
+				else
+					throw EvaluatorError("cannot have two consecutive numbers.");
             }
             // determine if a not operator of not equal to
             else if (current == '!')
@@ -568,7 +568,7 @@ string Infix_To_Postfix::convert(const string& expression){
     } else if (is_operator(next_token[0])) {
       process_operator(next_token[0]);
     } else {
-      throw Syntax_Error("Unexpected Character Encountered");
+      throw EvaluatorError("Unexpected Character Encountered");
     }
   } // End while
   // Pop any remaining operators and append them to postfix
@@ -576,7 +576,7 @@ string Infix_To_Postfix::convert(const string& expression){
     char op = operator_stack.top();
     operator_stack.pop();
     if (op == '(' || op == '[' || op == '}') {
-      throw Syntax_Error("Unmatched open parenthesis");
+      throw EvaluatorError("Unmatched open parenthesis");
     }
     postfix += op;
     postfix += " ";
@@ -591,7 +591,7 @@ string Infix_To_Postfix::convert(const string& expression){
 void Infix_To_Postfix::process_operator(char op) {
   if (operator_stack.empty() || (op == '(') || (op == '[') || (op == '{')) {
     if (op == ')' || op == ']' || op == '}')
-      throw Syntax_Error("Unmatched close parenthesis");
+      throw EvaluatorError("Unmatched close parenthesis");
     operator_stack.push(op);
   } else {
     if (precedence(op) > precedence(operator_stack.top()) || op=='t' || op=='!' || op=='_') {
@@ -617,21 +617,21 @@ void Infix_To_Postfix::process_operator(char op) {
             && (operator_stack.top() == '(')) {
           operator_stack.pop();
         } else {
-          throw Syntax_Error("Unmatched close parentheses");
+          throw EvaluatorError("Unmatched close parentheses");
         }
       } else if (op == ']') {
         if (!operator_stack.empty() 
             && (operator_stack.top() == '[')) {
           operator_stack.pop();
         } else {
-          throw Syntax_Error("Unmatched close parentheses");
+          throw EvaluatorError("Unmatched close parentheses");
         }
       } else if (op == '}') {
         if (!operator_stack.empty() 
             && (operator_stack.top() == '{')) {
           operator_stack.pop();
         } else {
-          throw Syntax_Error("Unmatched close parentheses");
+          throw EvaluatorError("Unmatched close parentheses");
         }
       } else {
         operator_stack.push(op);

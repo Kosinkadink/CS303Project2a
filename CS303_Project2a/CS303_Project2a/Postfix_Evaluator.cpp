@@ -35,7 +35,7 @@ int Postfix_Evaluator::eval(const std::string& expression) {
       int result = eval_op(next_char);
       operand_stack.push(result);
     } else {
-      throw Syntax_Error("Invalid character encountered");
+      throw EvaluatorError("Invalid character encountered");
     }
   }
   if (!operand_stack.empty()) {
@@ -44,10 +44,10 @@ int Postfix_Evaluator::eval(const std::string& expression) {
     if (operand_stack.empty()) {
       return answer;
     } else {
-      throw Syntax_Error("Stack should be empty");
+      throw EvaluatorError("Stack should be empty");
     }
   } else {
-    throw Syntax_Error("Stack is empty");
+    throw EvaluatorError("Stack is empty");
   }
 }
 
@@ -59,7 +59,7 @@ int Postfix_Evaluator::eval(const std::string& expression) {
 */
 int Postfix_Evaluator::eval_op(char op) {
   if (operand_stack.empty()) 
-    throw Syntax_Error("Stack is empty");
+    throw EvaluatorError("Stack is empty");
   int rhs = operand_stack.top();
   operand_stack.pop();
   switch (op) {
@@ -72,7 +72,7 @@ int Postfix_Evaluator::eval_op(char op) {
 
 
   if (operand_stack.empty())
-    throw Syntax_Error("Stack is empty");
+    throw EvaluatorError("Stack is empty");
   int lhs = operand_stack.top();
   int result = 0;
   operand_stack.pop();

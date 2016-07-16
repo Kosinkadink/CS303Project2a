@@ -12,10 +12,10 @@ int main()
 	Infix_To_Postfix itp;
 	Postfix_Evaluator pe;
 
-	string teststring = "---3";
+	string teststring = "5+++5 >= 6^(-(2+2))";
 
     teststring = itp.prepare(teststring);
-    if (teststring != "")
+     if (teststring != "")
     {
         string teststring2 = "+ 1";
         string newstring = itp.convert(teststring);

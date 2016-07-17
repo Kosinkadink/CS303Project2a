@@ -628,7 +628,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
     }
     catch (EvaluatorError error)
     {
-        cout << error.what() << endl;
+        cout << error.what() << "  Error occured at character " << charnum << endl;
         system("pause");
         prepared = "";
     }

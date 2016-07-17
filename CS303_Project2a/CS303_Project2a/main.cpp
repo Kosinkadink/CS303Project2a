@@ -8,22 +8,12 @@ using namespace std;
 
 int main()
 {
-    int output = 0;
-	Infix_To_Postfix itp;
-	Postfix_Evaluator pe;
 
-	string teststring = "<0";
+	std::string teststring = "1!=+++0";
 
-    teststring = itp.prepare(teststring);
-     if (teststring != "")
-    {
-        string teststring2 = "+ 1";
-        string newstring = itp.convert(teststring);
 
-        output = pe.eval(newstring);
-        cout << output << endl;
-        system("pause");
-    }
+    Evaluator eval;
+    eval.eval(teststring);
 
 	return 0;
 }

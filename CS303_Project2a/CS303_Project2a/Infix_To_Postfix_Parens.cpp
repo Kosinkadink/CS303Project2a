@@ -115,6 +115,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back('_');
                         prepared.push_back(' ');
                         before = '_';
+                        charnum++;
                     }
                 }
                 // verify a digit exists byond the parenthesis
@@ -147,6 +148,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back('_');
                     prepared.push_back(' ');
                     before = '_';
+                    charnum++;
                 }
                 // subtraction
                 else if (isdigit(next) && isdigit(before))
@@ -195,6 +197,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back('t');
                         prepared.push_back(' ');
                         before = 't';
+                        charnum++;
                     }
                 }
                 // + sign after a parenthesis or power
@@ -211,6 +214,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back('t');
                         prepared.push_back(' ');
                         before = 't';
+                        charnum++;
                     }
                 }
                 // increment
@@ -234,6 +238,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back('t');
                     prepared.push_back(' ');
                     before = 't';
+                    charnum++;
                 }
                 // addition
                 else if (isdigit(next) && isdigit(before))
@@ -310,6 +315,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back('n');
                     prepared.push_back(' ');
                     before = 'n';
+                    charnum++;
 
                 }
                 // not operator
@@ -351,6 +357,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back('e');
                     prepared.push_back(' ');
                     before = 'e';
+                    charnum++;
                 }
             }
             // power
@@ -435,6 +442,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared += 'l';
                         prepared += ' ';
                         before = 'l';
+                        charnum++;
                     }
                     // keep looking
                     else if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
@@ -448,6 +456,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back('l');
                         prepared.push_back(' ');
                         before = 'l';
+                        charnum++;
                     }
                 }
             }
@@ -497,6 +506,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared += 'g';
                         prepared += ' ';
                         before = 'g';
+                        charnum++;
                     }
                     // keep looking
                     else if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
@@ -510,6 +520,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back('g');
                         prepared.push_back(' ');
                         before = 'g';
+                        charnum++;
                     }
                 }
             }
@@ -537,7 +548,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared += '&';
                         prepared += ' ';
                         before = '&';
-
+                        charnum++;
                     }
                     else if (isdigit(next))
                     {
@@ -545,6 +556,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared += '&';
                         prepared += ' ';
                         before = '&';
+                        charnum++;
                     }
                 }
             }
@@ -574,6 +586,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared += '|';
                         prepared += ' ';
                         before = '|';
+                        charnum++;
                     }
                     else if (isdigit(next))
                     {
@@ -581,6 +594,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared += '|';
                         prepared += ' ';
                         before = '|';
+                        charnum++;
                     }
                 }
             }

@@ -111,7 +111,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 								continue;
 							}
 						}
-						
+                        parse.putback(next);
                         prepared.push_back('_');
                         prepared.push_back(' ');
                         before = '_';
@@ -193,7 +193,6 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     // increment
                     else if (next == '+')
                     {
-                        parse >> next;
                         prepared.push_back('t');
                         prepared.push_back(' ');
                         before = 't';
@@ -319,7 +318,14 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 
                 }
                 // not operator
-                else if (isdigit(next) || next == '(' || next == '{' || next == '[')
+                else if (isdigit(next))
+                {
+                    parse.putback(next);
+                    prepared.push_back('!');
+                    prepared.push_back(' ');
+                    before = '!';
+                }
+                else if (next == '(' || next == '{' || next == '[')
                 {
                     do{
                         temp_stack.push(next);

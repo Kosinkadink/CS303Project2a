@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 
-	std::string teststring = "1!=+++0";
+	std::string teststring = "1/0";
 
 
     Evaluator eval;

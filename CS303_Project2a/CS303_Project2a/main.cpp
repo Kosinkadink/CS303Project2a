@@ -8,11 +8,11 @@ using namespace std;
 
 int main()
 {
-    int output;
+    int output = 0;
 	Infix_To_Postfix itp;
 	Postfix_Evaluator pe;
 
-	string teststring = "3<=>=2";
+	string teststring = "1---(((1)))";
 
     teststring = itp.prepare(teststring);
      if (teststring != "")
@@ -21,8 +21,9 @@ int main()
         string newstring = itp.convert(teststring);
 
         output = pe.eval(newstring);
+        cout << output << endl;
+        system("pause");
     }
-    cout << output << endl;
-    system("pause");
+
 	return 0;
 }

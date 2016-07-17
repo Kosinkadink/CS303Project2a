@@ -73,6 +73,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         prepared.push_back(' ');
                         before = '~';
                     }
+                    // be certain a digit exists beyond the parenthesis
 					else if (next == '(' || next == '{' || next == '[')
 					{
 						do{
@@ -116,18 +117,19 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         before = '_';
                     }
                 }
-			else if (next == '(' || next == '{' || next == '[')
-			{
-				do{
-					temp_stack.push(next);
-					parse >> next;
-				} while (!isdigit(next));
-				parse.putback(next);
-				unstack(parse);
-				prepared.push_back('-');
-				prepared.push_back(' ');
-				before = '-';		
-			}
+                // verify a digit exists byond the parenthesis
+			    else if (next == '(' || next == '{' || next == '[')
+			    {
+			    	do{
+				    	temp_stack.push(next);
+				    	parse >> next;
+				    } while (!isdigit(next));
+				    parse.putback(next);
+				    unstack(parse);
+				    prepared.push_back('-');
+				    prepared.push_back(' ');
+				    before = '-';		
+		    	}
                 // decrement
                 else if (next == '-')
                 {
@@ -167,6 +169,13 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 						before = '-';
 					}
 				}
+                else if (isdigit(next) || next == '+')
+                {
+                    parse.putback(next);
+                    prepared.push_back('~');
+                    prepared.push_back(' ');
+                    before = '~';
+                }
             }
             else if (current == '+')
             {
@@ -182,6 +191,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     // increment
                     else if (next == '+')
                     {
+                        parse >> next;
                         prepared.push_back('t');
                         prepared.push_back(' ');
                         before = 't';
@@ -209,6 +219,10 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     parse >> next;
                     if (next == '+')
                     {
+                        if (before == '&' || before == '|' || before == '<' || before == 'l' || before == '>' || before == 'g' || before == 'n' || before == 'e')
+                        {
+                            throw EvaluatorError("Addition must be bracketed by digits on both sides.");
+                        }
                         parse.putback(next);
                         parse.putback(next);
                         prepared += '+';
@@ -256,7 +270,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     prepared.push_back(' ');
                 }
                 else
-                    throw EvaluatorError("must be bracketed by numbers.");
+                    throw EvaluatorError("Arithmatic operators must be bracketed by numbers.");
             }
             // next several values may be one number, catch them all
             else if (isdigit(current))
@@ -280,6 +294,8 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 // not equal to
                 if (next == '=')
                 {
+                    if (before == 't' || before == '_' || before == '!' || before == '~')
+                        throw EvaluatorError("A binary operator cannot follow a unary operator.");
                     do{
                         parse >> next;
 
@@ -320,6 +336,8 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 // legal
                 if (next == '=')
                 {
+                    if (before == 't' || before == '_' || before == '!' || before == '~' )
+                        throw EvaluatorError("A binary operator cannot follow a unary operator.");
                     do{
                         parse >> next;
 
@@ -373,6 +391,8 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             // < or <=
             else if (current == '<')
             {
+                if (before == 't' || before == '_' || before == '!' || before == '~')
+                    throw EvaluatorError("A binary operator cannot follow a unary operator.");
                 parse >> next;
 				if (next == '&' || next == '|' || next == '<' || next == '>')
 				{
@@ -387,7 +407,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     before = '<';
                 }
                 // keep looking
-                else if (next == '(' || next == '{' || next == '[' || next == '-')
+                else if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
                 {
                     do{
                         temp_stack.push(next);
@@ -417,7 +437,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         before = 'l';
                     }
                     // keep looking
-                    else if (next == '(' || next == '{' || next == '[' || next == '-')
+                    else if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
                     {
                         do{
                             temp_stack.push(next);
@@ -433,6 +453,8 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             }
             else if (current == '>')
             {
+                if (before == 't' || before == '_' || before == '!' || before == '~')
+                    throw EvaluatorError("A binary operator cannot follow a unary operator.");
                 parse >> next;
 				if (next == '&' || next == '|' || next == '<' || next == '>')
 				{
@@ -447,7 +469,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     before = '>';
                 }
                 // keep looking
-                else if (next == '(' || next == '{' || next == '[' || next == '-')
+                else if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
                 {
                     do{
                         temp_stack.push(next);
@@ -477,7 +499,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                         before = 'g';
                     }
                     // keep looking
-                    else if (next == '(' || next == '{' || next == '[' || next == '-')
+                    else if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
                     {
                         do{
                             temp_stack.push(next);
@@ -494,6 +516,8 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             // logical and
             else if (current == '&')
             {
+                if (before == 't' || before == '_' || before == '!' || before == '~')
+                    throw EvaluatorError("A logical operator cannot follow a unary operator.");
                 parse >> next;
                 if (next == '&' && (before == ')' || before == '}' || before == ']' || isdigit(before)))
                 {
@@ -502,7 +526,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 					if (next == '='||next=='&'||next=='|'||next=='<'||next=='>') 
 						{ throw EvaluatorError("Cannot have two binary operators in a row"); }
 
-                    if (next == '(' || next == '{' || next == '[' || next == '-')
+                    if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
                     {
 						do {
 							temp_stack.push(next);
@@ -527,6 +551,8 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
             // logical or
             else if (current == '|')
             {
+                if (before == 't' || before == '_' || before == '!' || before == '~')
+                    throw EvaluatorError("A logical operator cannot follow a unary operator.");
                 parse >> next;
                 if (next == '|' && (before == ')' || before == '}' || before == ']' || isdigit(before)))
                 {

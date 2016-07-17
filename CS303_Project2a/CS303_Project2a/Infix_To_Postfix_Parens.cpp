@@ -49,11 +49,11 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 				g = 1;
 				if (current == '<' || current == '>' || current == '&' || current == '|') 
 				{
-					throw EvaluatorError("Expression cannot start with a binary operator @ char: 0");
+					throw EvaluatorError("Expression cannot start with a binary operator.");
 				}
 				if (current == ')' || current == '}' || current == ']')
 				{
-					throw EvaluatorError("Expression cannot start with a closing parenthesis @ char: 0");
+					throw EvaluatorError("Expression cannot start with a closing parenthesis.");
 				}
 
 			}
@@ -458,7 +458,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                 parse >> next;
 				if (next == '&' || next == '|' || next == '<' || next == '>')
 				{
-					throw EvaluatorError("Cannot have two binary operators in a row");
+					throw EvaluatorError("Cannot have two binary operators in a row.");
 				}
                 // look for a digit
                 if (isdigit(next))
@@ -488,7 +488,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 
 					if (next == '=' || next == '&' || next == '|' || next == '<' || next == '>')
 					{
-						throw EvaluatorError("Cannot have two binary operators in a row");
+						throw EvaluatorError("Cannot have two binary operators in a row.");
 					}
                     // look for a digit
                     if (isdigit(next))
@@ -524,7 +524,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
                     parse >> next;
 
 					if (next == '='||next=='&'||next=='|'||next=='<'||next=='>') 
-						{ throw EvaluatorError("Cannot have two binary operators in a row"); }
+						{ throw EvaluatorError("Cannot have two binary operators in a row."); }
 
                     if (next == '(' || next == '{' || next == '[' || next == '-' || next == '+')
                     {
@@ -560,7 +560,7 @@ std::string Infix_To_Postfix::prepare(const std::string& expression)
 
 					if (next == '=' || next == '&' || next == '|' || next == '<' || next == '>')
 					{
-						throw EvaluatorError("Cannot have two binary operators in a row");
+						throw EvaluatorError("Cannot have two binary operators in a row.");
 					}
 
                     if (next == '(' || next == '{' || next == '[')
